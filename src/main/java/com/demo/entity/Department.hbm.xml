@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Hibernate Mapping DTD. -->
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.demo.entity">
+    <class name="Department" table="department">
+        
+        <cache usage="read-write" region="departmentCache"/>
+
+        <!-- Maps the ID and primary key generation -->
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+
+        <!-- Maps the 'name' field with a unique constraint -->
+        <property name="name" type="string" column="name" unique="true"/>
+
+        <!--
+            Maps the many-to-many relationship with Employee.
+            - `inverse="true"` marks this side as the inverse/non-owning side of the relationship.
+              Hibernate will not manage the association from this end.
+            - `mappedBy = "departments"` in the JPA annotation is equivalent to `inverse="true"`
+              in the XML mapping.
+        -->
+        <list name="employees" table="employee_department" lazy="true" inverse="true">
+    		<cache usage="read-write"/>
+    		<key column="department_id"/>
+    		<index column="list_index"/> 
+   			<many-to-many class="Employee" column="employee_id"/>
+		</list>	
+    </class>
+</hibernate-mapping>

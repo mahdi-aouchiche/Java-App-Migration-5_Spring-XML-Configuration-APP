@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Hibernate Mapping DTD. -->
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping package="com.demo.entity">
+	<class name="Employee" table="employee">
+		<!-- Use L2 cache -->
+		<cache usage="read-write" region="employeeCache"/>
+		
+		<!-- Maps the ID and primary key auto generation -->
+		<id name="id" column="id" type="int">
+			<!-- increment id using database increment function -->
+			<generator class="native"/>
+		</id>
+		
+		<!-- Maps the name field -->
+		<property name="name" column="name" type="string" not-null="true" unique-key="UK_NAME_AGE"/>
+		
+		<!-- Maps the age field -->
+		<property name="age" type="int" not-null="true" unique-key="UK_NAME_AGE">
+			<!-- Age constraint age <= 18 and age <=100 -->
+			<column name="age" check="age &gt;= 18 AND age &lt;=100"/>
+		</property>
+		
+		<!-- Maps the salary field -->
+		<property name="salary" type="double">
+			<!-- Salary constraint salary >= $0.00 -->
+			<column name="salary" check="salary &gt;= 0"/>
+		</property>
+		
+		 <!-- Maps the Many-to-Many relationship with Department -->
+        <list name="departments" table="employee_department" lazy="true" cascade="all">
+            
+            <!-- Specifies the second-level cache for the collection -->
+            <cache usage="read-write"/>
+            
+            <!--
+                The `key` element maps the foreign key for this side of the
+                relationship (the `employee_id` column in the join table).
+            -->
+            <key column="employee_id"/>
+			
+			<!-- Required for list ordering -->
+			<index column="list_index"/> 
+			
+            <!--
+                The `many-to-many` element maps the foreign key for the other
+                side of the relationship (the `department_id` column).
+            -->
+            <many-to-many class="Department" column="department_id"/>
+        </list>        
+	</class>
+</hibernate-mapping>
