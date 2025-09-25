@@ -3,11 +3,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
-       					   http://www.springframework.org/schema/beans/spring-beans.xsd
-       					   http://www.springframework.org/schema/context 
-       					   http://www.springframework.org/schema/context/spring-context.xsd
-       					   http://www.springframework.org/schema/tx
-       					   http://www.springframework.org/schema/tx/spring-tx.xsd">
+       					   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- DataSource -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -36,6 +32,7 @@
                 <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</prop>
+                <prop key="hibernate.javax.cache.missing_cache_strategy">create</prop>
             </props>
         </property>
     </bean>
